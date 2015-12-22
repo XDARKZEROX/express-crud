@@ -7,8 +7,12 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-//Se agrega este archivo
+//Se agrega este archivo de conexiona  bd
 var db = require('./model/db');
+//Se carga el modelo
+var passenger = require('./model/passengers');
+//Se agrega el enrutador de passenger
+var passengers = require('./routes/passengers');
 
 var app = express();
 
@@ -26,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/passengers', passengers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
