@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+    h1.
+         #{title}
+    ul
+        - each passenger, i in passengers
+            li
+                = passenger.name
+                = passenger.lastName
+                = passenger.gender
+                = passenger.birthday
+                = passenger.nacionality
+                

@@ -6,6 +6,8 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/paquetes');
 
+//mongoose.connect('mongodb://node:node@novus.modulusmongo.net:27017/Iganiq8o'); //para conectarse a una base de datos remota
+
 //Este còdigo nos permite saber si la Conexion a la base de datos fue correcta
 /*
 var db = mongoose.connection;
