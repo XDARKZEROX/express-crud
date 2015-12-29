@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var passengerSchema = new mongoose.Schema({  
-  name: String,
+  year: String,
   lastName: String,
   gender: String,
   birthday: String,
@@ -19,6 +19,7 @@ var passengerSchema = new mongoose.Schema({
 mongoose.model('Passenger', passengerSchema,'passenger');
 
 /*
+esto sirve para insertar un nuevo passenger dentro del model
 var newPassenger = mongoose.model('Passenger');
 var johndoe = new newPassenger ({
       name: 'Alexnder'
