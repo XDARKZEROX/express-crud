@@ -4,11 +4,13 @@ var express = require('express'),
     bodyParser = require('body-parser'), //parses information from POST
     methodOverride = require('method-override'); //used to manipulate POST
 
-router.use(bodyParser.urlencoded({ extended: true }))
-
 //Esto es un MiddleWare se disparará cada vez que se haga una llamada a cualquiera
 //de los metodos de Passengers.js
 //Para este ejemplo solo agregamos un console.log
+//router.use(bodyParser.text());
+//router.use(bodyParser.urlencoded({ extended: false }));
+//router.use(bodyParser.json());
+
 router.use(function(req, res, next) {
     //Aca podriamos hacer un metodo para realizar un logger por ejemplo
     //o incluso validaciones de datos antes de realizar el query a la base de datos
@@ -29,7 +31,7 @@ router.use(methodOverride(function(req, res){
 }))
 
 //definiremos la ruta por la que accederemos a obtener todos los pasajeros
-router.route('/getPassengers')
+router.route('/passengers')
     //GET all passengers
     .get(function(req, res, next) {
         //llamamos al model y por medio de "find" obtenemos todos los pasajeros desde Mongo
@@ -41,14 +43,37 @@ router.route('/getPassengers')
             } else {
                 res.json(passengers);
               }     
-        }).select('-_id'); //se ignoran los campos que no desean ser mostrados
+        }).select('-_id'); //en esta funcion puedo mostrar los campos que deseo y que no, si no quiero mostrar el
+        //id se antepone el '-'
     })
 
-router.route('/getPassenger/:passenger_id')
- // get the bear with that id (accessed at GET http://localhost:8080/api/bears/:bear_id)
+    .post(function(req, res) {
+        //creamos un objeto de nuestro modelo y seteamos los parametros
+        mongoose.model('Passenger').create({
+            name : req.body.name,
+            lastName : req.body.lastName,
+            gender : req.body.gender,
+            birthday : req.body.birthday,
+            nacionality: req.body.nacionality,
+            numberOfDocument : req.body.numberOfDocument,
+            documentType: req.body.documentType,
+            bookingCode: req.body.bookingCode
+        }, function (err, passenger) {
+              if (err) {
+                  res.send("Ocurrio un error al momento de agregar el Pasajero");
+              } else {
+                  res.json(passenger);
+              }
+        })
+        
+        res.json({ message: 'Bear created!' });
+    })
+
+router.route('/passenger/:passenger_dni')
     .get(function(req, res) {
-        console.log(req.params);
-        mongoose.model('Passenger').findById(req.params.passenger_id, function(err, passenger) {
+        //Si deseamos obtener por el id de la coleccion podriamos utilizar
+        //findById(req.params.passenger_id, function(err, passenger) {
+        mongoose.model('Passenger').findOne({'numberOfDocument': req.params.passenger_dni}, function(err, passenger) {
             if (err) {
               //En caso de encontrar algun error o no encontrar algun dato se retorna
               //la respuesta como null
@@ -56,7 +81,7 @@ router.route('/getPassenger/:passenger_id')
             } else {
               res.json(passenger);  
             }
-        });
-    });
+        }).select('name lastName nacionality documentType bookingCode -_id');
+    })
 
 module.exports = router;

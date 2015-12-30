@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var passengerSchema = new mongoose.Schema({  
-  year: String,
+  name: String,
   lastName: String,
   gender: String,
   birthday: String,

@@ -3,6 +3,11 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+
+//body-parser se usa para reibir las solicitudes por POST bajo 
+//el encoding x-www-form-urlencoded
+//En caso se agregen archivos (files) se requiere usar el
+//multipart/form-data, y por ende otra libreria como "Multer"
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
@@ -23,15 +28,19 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.json()); //Soporta el envio del body en formato JSON-encoded
+app.use(bodyParser.urlencoded({ extended: false })); //Soporta el envio del body en formato URL-encoded
+/*app.use(bodyParser.text({
+    type: "text/html"
+}));*/
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/passengers', passengers);
+app.use('/api-passengers', passengers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
