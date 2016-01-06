@@ -66,7 +66,7 @@ router.route('/passengers')
               }
         })
         
-        res.json({ message: 'Bear created!' });
+        res.json({ message: 'Pasajero creado correctamente' });
     })
 
 router.route('/passenger/:passenger_dni')
@@ -83,5 +83,19 @@ router.route('/passenger/:passenger_dni')
             }
         }).select('name lastName nacionality documentType bookingCode -_id');
     })
+
+     //Método para eliminar un pasajero por medio de DELETE, el parametro a agregar por get deberá ser el id
+     //del pasajero.
+    .delete(function(req, res) {
+        mongoose.model('Passenger').remove({
+            _id: req.params.passenger_dni
+        }, function(err, pasenger) {
+            if (err){
+              res.send(err);
+            } else {
+              res.json({ message: 'Se eliminó el pasajero.' });
+            }
+        });
+    });
 
 module.exports = router;
