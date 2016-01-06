@@ -15,3 +15,15 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
   console.log("Conexion establecida");
 });*/
+
+//Mysql Connection
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'mysql',
+  database : 'prueba'
+});
+
+connection.connect();

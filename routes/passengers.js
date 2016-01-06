@@ -84,11 +84,12 @@ router.route('/passenger/:passenger_dni')
         }).select('name lastName nacionality documentType bookingCode -_id');
     })
 
-     //Método para eliminar un pasajero por medio de DELETE, el parametro a agregar por get deberá ser el id
+     //Método para eliminar un pasajero por medio de DELETE, el parametro se deberá agregar por get
      //del pasajero.
     .delete(function(req, res) {
         mongoose.model('Passenger').remove({
-            _id: req.params.passenger_dni
+            //Aqui podemos espeficiar cual campo es el que buscará para encontrar la colección y proceder a eliminaar
+            numberOfDocument: req.params.passenger_dni
         }, function(err, pasenger) {
             if (err){
               res.send(err);
