@@ -1,3 +1,4 @@
+var mysql = require('mysql');
 //Conexión a mongodb
 
 //Si quisieramos chequear las dependencias que no estan
@@ -17,13 +18,28 @@ db.once('open', function (callback) {
 });*/
 
 //Mysql Connection
-var mysql = require('mysql');
+//Al ser esto una conexiòn no global, esportaremos la funciòn de
+//conectar la base de datos Mysql
 
+//esto puede llamar a la funcion createConnection o createPool
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'mysql',
-  database : 'prueba'
+    host     : 'localhost',
+    user     : 'root',
+    password : 'mysql',
+    database : 'prueba',
+    connectionLimit: 50,
+    supportBigNumbers: true
 });
 
 connection.connect();
+
+
+module.exports = connection;
+/*
+connection.connect(function(err) {
+  if (err) {
+    console.error('error connecting: ' + err.stack);
+    return;
+  }
+  console.log('connected as id ' + connection.threadId);
+});*/
