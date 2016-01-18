@@ -25,11 +25,27 @@ router.route('/users')
         //var table = ["user_login"];
         // query = mysql.format(query,table);
         //var connection = mysqlconnection.connection();
-        mysqlconnection.query(query,function(err,rows){
+        mysqlconnection.query(query,function(err,usuarios){
             if(err) {
-                res.json({"Error" : true, "Message" : "Error executing MySQL query"});
+                return handleError(err);
             } else {
-                res.json({"Error" : false, "Message" : "Success", "Users" : rows});
+                res.json(usuarios);
+            }
+        });
+    })
+
+router.route('/users/:user_id')
+    .get(function(req, res) {
+        
+        var query = "SELECT * FROM ?? WHERE ??=?";
+        var table_format = ["usuario","idusuario",req.params.user_id];
+        
+        query = mysql.format(query,table_format);
+        mysqlconnection.query(query,function(err,user){
+             if(err) {
+                return handleError(err);
+            } else {
+                res.json(user);
             }
         });
     })
