@@ -22,7 +22,8 @@ db.once('open', function (callback) {
 //conectar la base de datos Mysql
 
 //esto puede llamar a la funcion createConnection o createPool
-var connection = mysql.createConnection({
+
+/*var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : 'mysql',
@@ -30,11 +31,23 @@ var connection = mysql.createConnection({
     connectionLimit: 50,
     supportBigNumbers: true
 });
-
 connection.connect();
-
-
 module.exports = connection;
+*/
+
+exports.connect = function(e) {
+  var connection = mysql.createPool({
+    host     : 'localhost',
+    user     : 'root',
+    password : 'mysql',
+    database : 'prueba',
+    connectionLimit: 50,
+    supportBigNumbers: true
+  });  
+  
+  return connection;
+}
+
 /*
 connection.connect(function(err) {
   if (err) {

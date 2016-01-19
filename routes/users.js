@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 bodyParser = require('body-parser');
+var userModel = require('../model/users.js');
 var mysqlconnection = require('../model/db.js');
 
 router.use(function(req, res, next) {
@@ -21,17 +22,32 @@ router.get('/', function(req, res, next) {
 router.route('/users')
 	.get(function(req, res, next) {
 
-		var query = "SELECT * FROM usuario";
-        //var table = ["user_login"];
-        // query = mysql.format(query,table);
-        //var connection = mysqlconnection.connection();
-        mysqlconnection.query(query,function(err,usuarios){
+        userModel.getAll(function(err, result){
+            if (err) {
+                return handleError(err);
+            } else {
+                return res.json(result);
+            }
+
+        });
+        
+        /*
+        var query = "SELECT * FROM usuario";
+        mysqlconnection.connect().query(query,function(err,usuarios){
             if(err) {
                 return handleError(err);
             } else {
                 res.json(usuarios);
             }
-        });
+        });*/
+    s})
+
+    //Agregar un nuevo Usuario
+    .post(function(req, res) {
+        //connection.query('insert into Person set ?', req.body,
+
+
+
     })
 
 router.route('/users/:user_id')
@@ -41,7 +57,7 @@ router.route('/users/:user_id')
         var table_format = ["usuario","idusuario",req.params.user_id];
         
         query = mysql.format(query,table_format);
-        mysqlconnection.query(query,function(err,user){
+        mysqlconnection.connect().query(query,function(err,user){
              if(err) {
                 return handleError(err);
             } else {
