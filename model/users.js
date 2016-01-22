@@ -15,5 +15,33 @@ exports.getAll = function(callback) {
                callback(null, usuarios);
             }	
     });
+}
+
+exports.getUserByID = function(user_id,callback) {
+
+	var query = "SELECT * FROM ?? WHERE ??=?";
+	var table_format = ["usuario","idusuario",user_id];
+	query = mysql.format(query,table_format);
+    mysqlconnection.connect().query(query,function(err,usuario){
+            if(err) {
+            	callback(err, null);
+            } else {
+            	callback(null, usuario);
+            }	
+    });
+}
+
+exports.addUser = function(userData,callback) {
+
+	var query = "INSERT INTO usuario SET ?";
+	var table_format = [userData];
+	query = mysql.format(query,table_format);
+	mysqlconnection.connect().query(query,function(err,usuario){
+            if(err) {
+            	callback(err, null);
+            } else {
+            	callback(null, usuario);
+            }	
+    });
 
 }

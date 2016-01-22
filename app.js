@@ -16,7 +16,7 @@ var routes = require('./routes/index');
 var db = require('./model/db');
 //Se carga el modelo
 var passenger = require('./model/passengers');
-//Se agrega el enrutador de passenger
+//Se agrega el enrutçador de passenger
 var passengers = require('./routes/passengers');
 var users = require('./routes/users');
 var app = express();
@@ -72,6 +72,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

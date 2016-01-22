@@ -3,7 +3,6 @@ var router = express.Router();
 var mysql = require('mysql');
 bodyParser = require('body-parser');
 var userModel = require('../model/users.js');
-var mysqlconnection = require('../model/db.js');
 
 router.use(function(req, res, next) {
     //Aca podriamos hacer un metodo para realizar un logger por ejemplo
@@ -24,44 +23,44 @@ router.route('/users')
 
         userModel.getAll(function(err, result){
             if (err) {
-                return handleError(err);
+                res.json({ id: err.errno, message: err.code });
             } else {
                 return res.json(result);
             }
-
         });
-        
-        /*
-        var query = "SELECT * FROM usuario";
-        mysqlconnection.connect().query(query,function(err,usuarios){
-            if(err) {
-                return handleError(err);
-            } else {
-                res.json(usuarios);
-            }
-        });*/
-    s})
+    })
 
     //Agregar un nuevo Usuario
     .post(function(req, res) {
-        //connection.query('insert into Person set ?', req.body,
+        //creamos una variable donde almacenar los datos enviados por request
+        var userData = {
+            idusuario : req.body.id,
+            nickName: req.body.nickName,
+            nombre : req.body.name,
+            apellido : req.body.lastName,
+            pais : req.body.country,
+            ciudad : req.body.city,
+            contrasena : req.body.password,
+            fechaingreso : reg.body.dateIn
+        };
 
-
-
+        userModel.addUser(userData,function(err, result){
+            if (err) {
+                res.json({ id: err.errno, message: err.code });
+            } else {
+                return res.json(result);
+            }         
+        });
     })
 
-router.route('/users/:user_id')
+router.route('/user/:user_id')
     .get(function(req, res) {
         
-        var query = "SELECT * FROM ?? WHERE ??=?";
-        var table_format = ["usuario","idusuario",req.params.user_id];
-        
-        query = mysql.format(query,table_format);
-        mysqlconnection.connect().query(query,function(err,user){
-             if(err) {
-                return handleError(err);
+        userModel.getUserByID(req.params.user_id,function(err, user){
+            if (err) {
+                res.json({ id: err.errno, message: err.code });
             } else {
-                res.json(user);
+                return res.json(user);
             }
         });
     })
