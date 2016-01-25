@@ -43,5 +43,19 @@ exports.addUser = function(userData,callback) {
             	callback(null, usuario);
             }	
     });
+}
 
+exports.deleteUser = function(id, callback) {
+
+	var query = "DELETE FROM usuario where ?? = ?";
+	var table_format = ["idusuario",id];
+	query = mysql.format(query,table_format);
+	console.log(query);
+	mysqlconnection.connect().query(query,function(err,usuario){
+            if(err) {
+            	callback(err, null);
+            } else {
+            	callback(null, usuario);
+            }	
+    });
 }

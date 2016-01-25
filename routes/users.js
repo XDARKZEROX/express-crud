@@ -1,8 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var mysql = require('mysql');
-bodyParser = require('body-parser');
-var userModel = require('../model/users.js');
+var express = require('express'),
+    router = express.Router(),
+    mysql = require('mysql'),
+    bodyParser = require('body-parser'),
+    userModel = require('../model/users.js'),
+    methodOverride = require('method-override');
 
 router.use(function(req, res, next) {
     //Aca podriamos hacer un metodo para realizar un logger por ejemplo
@@ -41,14 +42,15 @@ router.route('/users')
             pais : req.body.country,
             ciudad : req.body.city,
             contrasena : req.body.password,
-            fechaingreso : reg.body.dateIn
+            fechaingreso : req.body.dateIn
         };
 
         userModel.addUser(userData,function(err, result){
             if (err) {
                 res.json({ id: err.errno, message: err.code });
             } else {
-                return res.json(result);
+                console.log(result);
+                res.json({ message: 'Usuario creado correctamente con id' + result.insertId});
             }         
         });
     })
@@ -64,6 +66,16 @@ router.route('/user/:user_id')
             }
         });
     })
+
+    .delete(function(req, res){
+        userModel.deleteUser(req.params.user_id,function(err, user){
+            if (err) {
+                res.json({ id: err.errno, message: err.code });
+            } else {
+                res.json({ message: 'Se eliminó el Usuario satisfactoriamente.' });
+           }
+        });
+    });
 
 module.exports = router;
 
