@@ -11,23 +11,30 @@ var express = require('express'),
 //router.use(bodyParser.urlencoded({ extended: false }));
 //router.use(bodyParser.json());
 
-router.use(function(req, res, next) {
-    //Aca podriamos hacer un metodo para realizar un logger por ejemplo
-    //o incluso validaciones de datos antes de realizar el query a la base de datos
-    console.log('Estamos probando el MiddleWare');
-    //Next se emplea para que el flujo al metodo requerido continue y no se
-    //detenga en este paso
-    next();
+//Este Middleware se dispara cuando se realiza una llamada por GET o POST y uno de los
+//parámetros coincide con el campo a evaluar.
+router.param('passenger_dni', function(req, res, next, passenger_dni) {
+  if(req.method == 'GET')
+  {
+    mongoose.model('Passenger').findOne({'numberOfDocument': req.params.passenger_dni}, function(err, passenger) {
+      if(passenger == null){
+          res.json({message : 'Passenger not found.'});
+      } else {
+        next();  
+      }
+    });
+  }
 });
 
+//Este middleware se dispara cuado detecta un form html (probar)
 router.use(methodOverride(function(req, res){
-      console.log('entramos al metodo override');
       if (req.body && typeof req.body === 'object' && '_method' in req.body) {
         // look in urlencoded POST bodies and delete it
         var method = req.body._method
         delete req.body._method
         return method
       }
+
 }))
 
 //definiremos la ruta por la que accederemos a obtener todos los pasajeros
@@ -41,8 +48,8 @@ router.route('/passengers')
               //la respuesta como null
               return handleError(err);
             } else {
-                res.json(passengers);
-              }     
+              res.json(passengers);
+            }     
         }).select('-_id'); //en esta funcion puedo mostrar los campos que deseo y que no, si no quiero mostrar el
         //id se antepone el '-'
     })
@@ -62,11 +69,9 @@ router.route('/passengers')
               if (err) {
                   res.send("Ocurrio un error al momento de agregar el Pasajero");
               } else {
-                  res.json(passenger);
+                 res.json({ message: 'Pasajero creado correctamente' });
               }
         })
-        
-        res.json({ message: 'Pasajero creado correctamente' });
     })
 
 router.route('/passenger/:passenger_dni')
@@ -94,7 +99,7 @@ router.route('/passenger/:passenger_dni')
             if (err){
               res.send(err);
             } else {
-              res.json({ message: 'Se eliminó el pasajero.' });
+              res.json({ message: 'Se eliminó el pasajero satisfactoriamente.' });
             }
         });
     });
