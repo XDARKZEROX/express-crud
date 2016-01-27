@@ -35,7 +35,7 @@ router.use(methodOverride(function(req, res){
         return method
       }
 
-}))
+}));
 
 //definiremos la ruta por la que accederemos a obtener todos los pasajeros
 router.route('/passengers')
@@ -102,6 +102,16 @@ router.route('/passenger/:passenger_dni')
               res.json({ message: 'Se eliminó el pasajero satisfactoriamente.' });
             }
         });
+    })
+
+    .put(function(req, res) {
+        mongoose.model('Passenger').findOne({'numberOfDocument': req.params.passenger_dni}, function(err, passenger) {
+            if (err) {
+              console.log('here');
+            } else {
+              console.log(passenger);
+            }
+        })
     });
 
 module.exports = router;
